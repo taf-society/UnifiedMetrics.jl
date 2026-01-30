@@ -1,7 +1,16 @@
 module UnifiedMetrics
 
 using Statistics
-using StatsBase: ordinalrank
+
+function _ordinalrank(x::AbstractVector)
+    n = length(x)
+    ranks = Vector{Int}(undef, n)
+    perm = sortperm(x)
+    for (rank, idx) in enumerate(perm)
+        ranks[idx] = rank
+    end
+    return ranks
+end
 
 include("regression.jl")
 include("classification.jl")

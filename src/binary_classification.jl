@@ -19,7 +19,7 @@ auc(actual, predicted)
 function auc(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
 
-    r = ordinalrank(predicted)
+    r = _ordinalrank(predicted)
     n_pos = sum(actual .== 1)
     n_neg = length(actual) - n_pos
 
