@@ -65,12 +65,13 @@ function apk(k::Integer, actual::AbstractVector, predicted::AbstractVector)
         return NaN
     end
 
+    actual_set = Set(actual)  # O(1) lookup instead of O(n)
     score = 0.0
     cnt = 0.0
     seen = Set{eltype(predicted)}()
 
     for i in 1:min(k, length(predicted))
-        if predicted[i] in actual && !(predicted[i] in seen)
+        if predicted[i] in actual_set && !(predicted[i] in seen)
             cnt += 1
             score += cnt / i
         end

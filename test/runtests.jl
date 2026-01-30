@@ -647,6 +647,50 @@ using Statistics
             # No overlap between actual and predicted
             @test f1_at_k(["a", "b"], ["x", "y", "z"], k=3) ≈ 0.0
         end
+
+        @testset "MASE/MSSE constant series" begin
+            # Constant series (naive error is zero)
+            constant = [5.0, 5.0, 5.0, 5.0, 5.0]
+            # Perfect forecast on constant series
+            @test mase(constant, constant) ≈ 0.0
+            @test msse(constant, constant) ≈ 0.0
+            # Non-perfect forecast on constant series
+            non_constant_pred = [5.0, 5.1, 5.0, 4.9, 5.0]
+            @test mase(constant, non_constant_pred) == Inf
+            @test msse(constant, non_constant_pred) == Inf
+        end
+
+        @testset "WAPE/WMAPE zero actuals" begin
+            zeros_actual = [0.0, 0.0, 0.0]
+            zeros_pred = [0.0, 0.0, 0.0]
+            nonzero_pred = [0.1, 0.2, 0.3]
+            # Perfect match on zeros
+            @test wape(zeros_actual, zeros_pred) ≈ 0.0
+            @test wmape(zeros_actual, zeros_pred) ≈ 0.0
+            # Non-matching predictions on zeros
+            @test wape(zeros_actual, nonzero_pred) == Inf
+            @test wmape(zeros_actual, nonzero_pred) == Inf
+        end
+
+        @testset "Tweedie deviance actual validation" begin
+            # Negative actuals should fail for power != 0
+            @test_throws AssertionError tweedie_deviance([-1.0, 2.0], [1.0, 2.0], power=1)
+            @test_throws AssertionError tweedie_deviance([-1.0, 2.0], [1.0, 2.0], power=2)
+            @test_throws AssertionError tweedie_deviance([-1.0, 2.0], [1.0, 2.0], power=1.5)
+        end
+
+        @testset "MeanQuadraticWeightedKappa near-zero" begin
+            # Near-zero kappas should not be biased
+            near_zero_kappas = [0.0, 0.001, -0.001, 0.0]
+            result = MeanQuadraticWeightedKappa(near_zero_kappas)
+            @test abs(result) < 0.01  # Should remain near zero
+        end
+
+        @testset "Probability validation" begin
+            @test_throws AssertionError ll([1, 0], [1.5, 0.5])  # probability > 1
+            @test_throws AssertionError ll([1, 0], [-0.1, 0.5])  # probability < 0
+            @test_throws AssertionError brier_score([1, 0], [1.5, 0.5])
+        end
     end
 
 end

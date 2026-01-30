@@ -48,6 +48,7 @@ ll(actual, predicted)
 """
 function ll(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
+    @assert all(0 .<= predicted .<= 1) "Predicted probabilities must be in [0, 1]"
 
     score = -(actual .* log.(predicted) .+ (1 .- actual) .* log.(1 .- predicted))
 
@@ -307,6 +308,7 @@ brier_score(actual, predicted)
 """
 function brier_score(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
+    @assert all(0 .<= predicted .<= 1) "Predicted probabilities must be in [0, 1]"
     return mean((predicted .- actual).^2)
 end
 

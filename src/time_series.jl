@@ -40,6 +40,10 @@ function mase(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real};
     sum_errors = sum(ae(actual, predicted))
     naive_errors = sum(ae(actual[naive_start:n], actual[1:naive_end]))
 
+    if naive_errors == 0
+        # Constant series: return 0 for perfect forecast, Inf otherwise
+        return sum_errors == 0 ? 0.0 : Inf
+    end
     return sum_errors / (n * naive_errors / naive_end)
 end
 
@@ -74,6 +78,10 @@ function msse(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real};
     sum_sq_errors = sum(se(actual, predicted))
     naive_sq_errors = sum(se(actual[naive_start:n], actual[1:naive_end]))
 
+    if naive_sq_errors == 0
+        # Constant series: return 0 for perfect forecast, Inf otherwise
+        return sum_sq_errors == 0 ? 0.0 : Inf
+    end
     return sum_sq_errors / (n * naive_sq_errors / naive_end)
 end
 
@@ -247,7 +255,11 @@ wape(actual, predicted)
 function wape(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
     total_actual = sum(abs.(actual))
-    return total_actual == 0 ? Inf : sum(abs.(actual .- predicted)) / total_actual
+    if total_actual == 0
+        # All actuals are zero: return 0 for perfect match, Inf otherwise
+        return sum(abs.(actual .- predicted)) == 0 ? 0.0 : Inf
+    end
+    return sum(abs.(actual .- predicted)) / total_actual
 end
 
 """

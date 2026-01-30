@@ -695,7 +695,12 @@ wmape(actual, predicted)
 """
 function wmape(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
-    return sum(ae(actual, predicted)) / sum(abs.(actual))
+    total_actual = sum(abs.(actual))
+    if total_actual == 0
+        # All actuals are zero: return 0 for perfect match, Inf otherwise
+        return sum(ae(actual, predicted)) == 0 ? 0.0 : Inf
+    end
+    return sum(ae(actual, predicted)) / total_actual
 end
 
 """
@@ -734,15 +739,18 @@ function tweedie_deviance(actual::AbstractVector{<:Real}, predicted::AbstractVec
     @assert all(predicted .> 0) "Predicted values must be positive for power != 0"
 
     if power == 1
-        # Poisson distribution
+        # Poisson distribution - actual must be non-negative
+        @assert all(actual .>= 0) "Actual values must be non-negative for Poisson (power=1)"
         deviance = 2 .* (actual .* log.(max.(actual, 1e-10) ./ predicted) .- (actual .- predicted))
         return mean(deviance)
     elseif power == 2
-        # Gamma distribution
-        deviance = 2 .* (log.(predicted ./ max.(actual, 1e-10)) .+ actual ./ predicted .- 1)
+        # Gamma distribution - actual must be positive
+        @assert all(actual .> 0) "Actual values must be positive for Gamma (power=2)"
+        deviance = 2 .* (log.(predicted ./ actual) .+ actual ./ predicted .- 1)
         return mean(deviance)
     else
-        # General Tweedie
+        # General Tweedie - actual must be non-negative
+        @assert all(actual .>= 0) "Actual values must be non-negative for power != 0"
         term1 = max.(actual, 1e-10).^(2 - power) / ((1 - power) * (2 - power))
         term2 = actual .* predicted.^(1 - power) / (1 - power)
         term3 = predicted.^(2 - power) / (2 - power)

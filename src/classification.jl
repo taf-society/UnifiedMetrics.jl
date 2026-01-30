@@ -124,11 +124,10 @@ function MeanQuadraticWeightedKappa(kappas::AbstractVector{<:Real};
     w = isnothing(weights) ? ones(length(kappas)) : copy(weights)
     w ./= mean(w)
 
-    # Clamp kappas to avoid singularities
-    max999(x) = sign(x) * min(0.999, abs(x))
-    min001(x) = sign(x) * max(0.001, abs(x))
-
-    clamped_kappas = [min001(max999(k)) for k in kappas]
+    # Clamp kappas to avoid singularities at ±1 in Fisher's z-transformation
+    # Only clamp magnitude to < 1, preserving near-zero values accurately
+    clamp_kappa(x) = clamp(x, -0.999, 0.999)
+    clamped_kappas = [clamp_kappa(k) for k in kappas]
 
     # Fisher's z-transformation
     r2z(x) = 0.5 * log((1 + x) / (1 - x))
