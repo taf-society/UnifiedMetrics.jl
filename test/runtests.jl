@@ -581,6 +581,72 @@ using Statistics
             @test_throws AssertionError accuracy([1, 2], [1])
             @test_throws AssertionError auc([1, 0], [0.5])
         end
+
+        @testset "AUC edge cases" begin
+            # No positives
+            @test isnan(auc([0, 0, 0], [0.5, 0.3, 0.2]))
+            # No negatives
+            @test isnan(auc([1, 1, 1], [0.9, 0.8, 0.7]))
+            # Tied scores should use average ranks
+            @test auc([1, 1, 0, 0], [0.5, 0.5, 0.5, 0.5]) ≈ 0.5
+        end
+
+        @testset "Lift/Gain empty inputs" begin
+            @test isnan(lift(Float64[], Float64[]))
+            @test isnan(gain(Float64[], Float64[]))
+        end
+
+        @testset "RSE/RAE constant actuals" begin
+            constant = [5.0, 5.0, 5.0, 5.0]
+            pred_match = [5.0, 5.0, 5.0, 5.0]
+            pred_diff = [4.0, 5.0, 6.0, 5.0]
+
+            # Perfect match on constant data
+            @test rse(constant, pred_match) ≈ 0.0
+            @test rae(constant, pred_match) ≈ 0.0
+
+            # Non-matching predictions on constant data
+            @test rse(constant, pred_diff) == Inf
+            @test rae(constant, pred_diff) == Inf
+        end
+
+        @testset "Tracking signal perfect predictions" begin
+            actual = [1.0, 2.0, 3.0, 4.0, 5.0]
+            @test tracking_signal(actual, actual) ≈ 0.0
+        end
+
+        @testset "Autocorrelation error edge cases" begin
+            # Short series
+            @test isnan(autocorrelation_error([1.0, 2.0], [1.0, 2.0]))
+
+            # Constant series
+            constant = [5.0, 5.0, 5.0, 5.0, 5.0]
+            @test isfinite(autocorrelation_error(constant, constant))
+        end
+
+        @testset "Tweedie deviance power=0" begin
+            actual = [1.0, 2.0, 3.0]
+            # Negative predictions should be allowed for power=0 (normal distribution)
+            predicted_neg = [-0.5, 2.5, 2.8]
+            @test isfinite(tweedie_deviance(actual, predicted_neg, power=0))
+        end
+
+        @testset "D2 Tweedie score edge cases" begin
+            # Non-positive mean with power != 0
+            actual_neg_mean = [-5.0, -3.0, -2.0]
+            predicted = [1.0, 1.0, 1.0]
+            @test isnan(d2_tweedie_score(actual_neg_mean, predicted, power=1.5))
+        end
+
+        @testset "SLE negative input validation" begin
+            @test_throws AssertionError sle([-2.0, 1.0], [1.0, 2.0])
+            @test_throws AssertionError sle([1.0, 2.0], [-2.0, 1.0])
+        end
+
+        @testset "F1@k zero precision and recall" begin
+            # No overlap between actual and predicted
+            @test f1_at_k(["a", "b"], ["x", "y", "z"], k=3) ≈ 0.0
+        end
     end
 
 end

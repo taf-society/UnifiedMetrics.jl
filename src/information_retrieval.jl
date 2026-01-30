@@ -377,8 +377,12 @@ function f1_at_k(actual::AbstractVector, predicted::AbstractVector; k::Integer=1
     prec = precision_at_k(actual, predicted, k=k)
     rec = recall_at_k(actual, predicted, k=k)
 
-    if isnan(prec) || isnan(rec) || (prec == 0 && rec == 0)
+    if isnan(prec) || isnan(rec)
         return NaN
+    end
+
+    if prec == 0 && rec == 0
+        return 0.0
     end
 
     return 2 * prec * rec / (prec + rec)

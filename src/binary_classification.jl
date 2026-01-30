@@ -19,10 +19,14 @@ auc(actual, predicted)
 function auc(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
 
-    r = _ordinalrank(predicted)
     n_pos = sum(actual .== 1)
     n_neg = length(actual) - n_pos
 
+    if n_pos == 0 || n_neg == 0
+        return NaN
+    end
+
+    r = _ordinalrank(predicted)
     return (sum(r[actual .== 1]) - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg)
 end
 
@@ -398,6 +402,10 @@ function lift(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real};
     @assert 0 < percentile <= 1 "percentile must be in (0, 1]"
 
     n = length(actual)
+    if n == 0
+        return NaN
+    end
+
     n_top = max(1, floor(Int, n * percentile))
 
     sorted_indices = sortperm(predicted, rev=true)
@@ -433,6 +441,10 @@ function gain(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real};
     @assert 0 < percentile <= 1 "percentile must be in (0, 1]"
 
     n = length(actual)
+    if n == 0
+        return NaN
+    end
+
     n_top = max(1, floor(Int, n * percentile))
 
     sorted_indices = sortperm(predicted, rev=true)

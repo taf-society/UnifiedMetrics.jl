@@ -127,7 +127,10 @@ function tracking_signal(actual::AbstractVector{<:Real}, predicted::AbstractVect
     cfe = sum(errors)  # Cumulative Forecast Error
     mad = mean(abs.(errors))  # Mean Absolute Deviation
 
-    return mad == 0 ? Inf : cfe / mad
+    if mad == 0
+        return cfe == 0 ? 0.0 : Inf
+    end
+    return cfe / mad
 end
 
 """
@@ -400,16 +403,24 @@ function autocorrelation_error(actual::AbstractVector{<:Real}, predicted::Abstra
     @assert max_lag >= 1 "max_lag must be at least 1"
 
     n = length(actual)
-    max_lag = min(max_lag, n - 2)
+    effective_max_lag = min(max_lag, n - 2)
+
+    if effective_max_lag < 1
+        return NaN  # Series too short for autocorrelation analysis
+    end
 
     function acf(x, lag)
         x_centered = x .- mean(x)
         n = length(x)
-        return sum(x_centered[1:n-lag] .* x_centered[lag+1:n]) / sum(x_centered.^2)
+        denom = sum(x_centered.^2)
+        if denom == 0
+            return 0.0  # Constant series has no autocorrelation
+        end
+        return sum(x_centered[1:n-lag] .* x_centered[lag+1:n]) / denom
     end
 
     errors = Float64[]
-    for lag in 1:max_lag
+    for lag in 1:effective_max_lag
         acf_actual = acf(actual, lag)
         acf_predicted = acf(predicted, lag)
         push!(errors, (acf_actual - acf_predicted)^2)

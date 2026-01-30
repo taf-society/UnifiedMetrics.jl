@@ -281,6 +281,8 @@ sle(actual, predicted)
 """
 function sle(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
+    @assert all(actual .>= -1) "actual values must be >= -1 for log transformation"
+    @assert all(predicted .>= -1) "predicted values must be >= -1 for log transformation"
     return (log.(1 .+ actual) .- log.(1 .+ predicted)) .^ 2
 end
 
@@ -351,7 +353,12 @@ rse(actual, predicted)
 """
 function rse(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     actual_mean = fill(mean(actual), length(actual))
-    return sse(actual, predicted) / sse(actual, actual_mean)
+    denom = sse(actual, actual_mean)
+    if denom == 0
+        # Actual is constant; return 0 if predictions match actual, Inf otherwise
+        return sse(actual, predicted) == 0 ? 0.0 : Inf
+    end
+    return sse(actual, predicted) / denom
 end
 
 """
@@ -397,7 +404,12 @@ rae(actual, predicted)
 """
 function rae(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     actual_mean = fill(mean(actual), length(actual))
-    return sum(ae(actual, predicted)) / sum(ae(actual, actual_mean))
+    denom = sum(ae(actual, actual_mean))
+    if denom == 0
+        # Actual is constant; return 0 if predictions match actual, Inf otherwise
+        return sum(ae(actual, predicted)) == 0 ? 0.0 : Inf
+    end
+    return sum(ae(actual, predicted)) / denom
 end
 
 """
@@ -712,12 +724,16 @@ tweedie_deviance(actual, predicted, power=1.5)
 """
 function tweedie_deviance(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real}; power::Real=1.5)
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
-    @assert all(predicted .> 0) "Predicted values must be positive"
 
     if power == 0
-        # Normal distribution - equivalent to MSE
+        # Normal distribution - equivalent to MSE (negative predictions allowed)
         return mean((actual .- predicted).^2)
-    elseif power == 1
+    end
+
+    # For power != 0, predictions must be positive
+    @assert all(predicted .> 0) "Predicted values must be positive for power != 0"
+
+    if power == 1
         # Poisson distribution
         deviance = 2 .* (actual .* log.(max.(actual, 1e-10) ./ predicted) .- (actual .- predicted))
         return mean(deviance)
@@ -799,8 +815,19 @@ d2_tweedie_score(actual, predicted, power=1.5)
 ```
 """
 function d2_tweedie_score(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real}; power::Real=1.5)
+    mean_val = mean(actual)
+
+    # For power != 0, the null model (mean prediction) must be positive
+    if power != 0 && mean_val <= 0
+        return NaN
+    end
+
     dev_pred = tweedie_deviance(actual, predicted, power=power)
-    mean_actual = fill(mean(actual), length(actual))
+    mean_actual = fill(mean_val, length(actual))
     dev_null = tweedie_deviance(actual, mean_actual, power=power)
+
+    if dev_null == 0
+        return dev_pred == 0 ? 1.0 : -Inf
+    end
     return 1 - dev_pred / dev_null
 end

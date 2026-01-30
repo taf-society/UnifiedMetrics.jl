@@ -2,12 +2,31 @@ module UnifiedMetrics
 
 using Statistics
 
-function _ordinalrank(x::AbstractVector)
+function _ordinalrank(x::AbstractVector; tiebreaker::Symbol=:average)
     n = length(x)
-    ranks = Vector{Int}(undef, n)
+    ranks = Vector{Float64}(undef, n)
     perm = sortperm(x)
-    for (rank, idx) in enumerate(perm)
-        ranks[idx] = rank
+
+    if tiebreaker == :average
+        i = 1
+        while i <= n
+            j = i
+            # Find all elements with the same value
+            while j < n && x[perm[j]] == x[perm[j+1]]
+                j += 1
+            end
+            # Assign average rank to all tied elements
+            avg_rank = (i + j) / 2.0
+            for k in i:j
+                ranks[perm[k]] = avg_rank
+            end
+            i = j + 1
+        end
+    else
+        # Original ordinal ranking (no tie handling)
+        for (rank, idx) in enumerate(perm)
+            ranks[idx] = Float64(rank)
+        end
     end
     return ranks
 end
