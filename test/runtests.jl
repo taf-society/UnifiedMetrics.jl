@@ -691,6 +691,26 @@ using Statistics
             @test_throws AssertionError ll([1, 0], [-0.1, 0.5])  # probability < 0
             @test_throws AssertionError brier_score([1, 0], [1.5, 0.5])
         end
+
+        @testset "ScoreQuadraticWeightedKappa single level" begin
+            # Both raters use only one rating level → perfect agreement
+            @test ScoreQuadraticWeightedKappa([3, 3, 3, 3], [3, 3, 3, 3]) ≈ 1.0
+        end
+
+        @testset "MRR and mean_ndcg empty inputs" begin
+            empty_actual = Vector{Vector{String}}()
+            empty_predicted = Vector{Vector{String}}()
+            @test isnan(mrr(empty_actual, empty_predicted))
+
+            empty_relevances = Vector{Vector{Float64}}()
+            @test isnan(mean_ndcg(empty_relevances))
+        end
+
+        @testset "Theil U2 m validation" begin
+            actual = [1.0, 2.0, 3.0, 4.0, 5.0]
+            predicted = [1.1, 2.0, 2.9, 4.1, 4.9]
+            @test_throws AssertionError theil_u2(actual, predicted, m=0)
+        end
     end
 
 end

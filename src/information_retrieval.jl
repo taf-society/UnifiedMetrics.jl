@@ -215,6 +215,10 @@ mrr(actual, predicted)  # (1/2 + 1/2 + 1/1) / 3 = 0.667
 function mrr(actual::AbstractVector{<:AbstractVector}, predicted::AbstractVector{<:AbstractVector})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
 
+    if isempty(actual)
+        return NaN
+    end
+
     reciprocal_ranks = Float64[]
     for (act, pred) in zip(actual, predicted)
         act_set = Set(act)
@@ -406,6 +410,9 @@ mean_ndcg(relevances, k=2)  # Mean NDCG@2
 ```
 """
 function mean_ndcg(relevances::AbstractVector{<:AbstractVector{<:Real}}; k::Union{Integer,Nothing}=nothing)
+    if isempty(relevances)
+        return NaN
+    end
     return mean([ndcg(rel, k=k) for rel in relevances])
 end
 

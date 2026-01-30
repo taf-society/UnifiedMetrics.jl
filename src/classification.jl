@@ -98,7 +98,12 @@ function ScoreQuadraticWeightedKappa(rater_a::AbstractVector{<:Integer},
     weights = [(labels[i] - labels[j])^2 for i in 1:n_levels, j in 1:n_levels]
 
     # Calculate kappa
-    return 1 - sum(weights .* confusion_mat) / sum(weights .* expected_mat)
+    denom = sum(weights .* expected_mat)
+    if denom == 0
+        # Both raters used only one rating level → perfect agreement
+        return 1.0
+    end
+    return 1 - sum(weights .* confusion_mat) / denom
 end
 
 """

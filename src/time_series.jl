@@ -217,6 +217,7 @@ theil_u2(actual, predicted)
 """
 function theil_u2(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real}; m::Integer=1)
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
+    @assert m >= 1 "Seasonal period m must be at least 1"
     @assert length(actual) > m "Length of actual must be greater than m"
 
     # Forecast errors (for periods where we have both forecast and naive)
