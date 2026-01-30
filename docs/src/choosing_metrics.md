@@ -59,7 +59,7 @@ Do you need interpretable units?
 #### For General Regression Tasks
 
 **Primary metric**: `rmse` or `mae`
-- Use `rmse` when large errors are costly (e.g., predicting house prices where a $100K error is much worse than ten $10K errors)
+- Use `rmse` when large errors are costly (e.g., predicting house prices where a \$100K error is much worse than ten \$10K errors)
 - Use `mae` when all errors matter equally (e.g., predicting delivery times)
 
 ```julia

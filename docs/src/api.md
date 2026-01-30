@@ -149,7 +149,7 @@ brier_score
 ### Precision and Recall
 
 ```@docs
-precision
+UnifiedMetrics.precision
 recall
 sensitivity
 specificity

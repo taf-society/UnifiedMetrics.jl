@@ -18,9 +18,9 @@ Classification metrics evaluate how well a model assigns items to discrete categ
 
 ## Basic Accuracy Metrics
 
-```@docs
-accuracy
-ce
+```julia
+accuracy(actual, predicted)  # Classification accuracy
+ce(actual, predicted)        # Classification error (1 - accuracy)
 ```
 
 **When to use**:
@@ -31,8 +31,8 @@ ce
 
 ## Balanced Accuracy
 
-```@docs
-balanced_accuracy
+```julia
+balanced_accuracy(actual, predicted)
 ```
 
 **When to use**:
@@ -43,8 +43,8 @@ balanced_accuracy
 
 ## Agreement Metrics
 
-```@docs
-cohens_kappa
+```julia
+cohens_kappa(actual, predicted)
 ```
 
 **Interpretation**:
@@ -61,9 +61,9 @@ cohens_kappa
 
 ## Matthews Correlation Coefficient
 
-```@docs
-matthews_corrcoef
-mcc
+```julia
+matthews_corrcoef(actual, predicted)
+mcc(actual, predicted)  # Alias
 ```
 
 **When to use**: The recommended single metric for binary classification, especially with imbalanced data.
@@ -75,8 +75,8 @@ mcc
 
 ## Confusion Matrix
 
-```@docs
-confusion_matrix
+```julia
+confusion_matrix(actual, predicted)
 ```
 
 **How to use**:
@@ -96,8 +96,8 @@ cm[:labels]   # [0, 1]
 
 ## Top-K Accuracy
 
-```@docs
-top_k_accuracy
+```julia
+top_k_accuracy(actual, predicted_probs, k)
 ```
 
 **When to use**:
@@ -118,9 +118,9 @@ top_k_accuracy(actual, probs, 2)  # Correct if true class in top 2
 
 ## Quadratic Weighted Kappa
 
-```@docs
-ScoreQuadraticWeightedKappa
-MeanQuadraticWeightedKappa
+```julia
+ScoreQuadraticWeightedKappa(rater_a, rater_b; min_rating, max_rating)
+MeanQuadraticWeightedKappa(kappas; weights=nothing)
 ```
 
 **When to use**:
@@ -143,8 +143,8 @@ ScoreQuadraticWeightedKappa(actual_ratings, predicted_ratings,
 
 ### Hamming Loss
 
-```@docs
-hamming_loss
+```julia
+hamming_loss(actual, predicted)
 ```
 
 **When to use**:
@@ -153,15 +153,15 @@ hamming_loss
 
 ### Zero-One Loss
 
-```@docs
-zero_one_loss
+```julia
+zero_one_loss(actual, predicted)
 ```
 
 ### Hinge Loss
 
-```@docs
-hinge_loss
-squared_hinge_loss
+```julia
+hinge_loss(actual, predicted)
+squared_hinge_loss(actual, predicted)
 ```
 
 **When to use**:
@@ -224,3 +224,5 @@ predicted = Bool[1 1 1; 0 1 0; 1 0 0]   # Predictions
 # Fraction of incorrectly predicted labels
 hamming_loss(actual, predicted)  # 0.444 (4 of 9 labels wrong)
 ```
+
+See the [API Reference](@ref) for complete function documentation.

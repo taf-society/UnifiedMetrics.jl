@@ -26,10 +26,10 @@ Regression metrics measure the difference between predicted and actual continuou
 
 ### Absolute Error Family
 
-```@docs
-ae
-mae
-mdae
+```julia
+ae(actual, predicted)   # Elementwise absolute error
+mae(actual, predicted)  # Mean absolute error
+mdae(actual, predicted) # Median absolute error
 ```
 
 **When to use**:
@@ -38,11 +38,11 @@ mdae
 
 ### Squared Error Family
 
-```@docs
-se
-sse
-mse
-rmse
+```julia
+se(actual, predicted)   # Elementwise squared error
+sse(actual, predicted)  # Sum of squared errors
+mse(actual, predicted)  # Mean squared error
+rmse(actual, predicted) # Root mean squared error
 ```
 
 **When to use**:
@@ -51,8 +51,8 @@ rmse
 
 ### Normalized RMSE
 
-```@docs
-nrmse
+```julia
+nrmse(actual, predicted; normalization=:range)
 ```
 
 **When to use**: Comparing RMSE across datasets with different scales.
@@ -61,19 +61,19 @@ nrmse
 
 ### Basic Percentage Errors
 
-```@docs
-ape
-mape
+```julia
+ape(actual, predicted)  # Elementwise absolute percentage error
+mape(actual, predicted) # Mean absolute percentage error
 ```
 
 **Warning**: MAPE is undefined when actual values are zero.
 
 ### Symmetric and Weighted Alternatives
 
-```@docs
-smape
-wmape
-mpe
+```julia
+smape(actual, predicted) # Symmetric MAPE
+wmape(actual, predicted) # Weighted MAPE
+mpe(actual, predicted)   # Mean percentage error (signed)
 ```
 
 **When to use**:
@@ -83,9 +83,9 @@ mpe
 
 ## Bias Metrics
 
-```@docs
-bias
-percent_bias
+```julia
+bias(actual, predicted)         # Average bias
+percent_bias(actual, predicted) # Percentage bias
 ```
 
 **Interpretation**:
@@ -94,10 +94,10 @@ percent_bias
 
 ## Logarithmic Error Metrics
 
-```@docs
-sle
-msle
-rmsle
+```julia
+sle(actual, predicted)   # Elementwise squared log error
+msle(actual, predicted)  # Mean squared log error
+rmsle(actual, predicted) # Root mean squared log error
 ```
 
 **When to use**:
@@ -107,19 +107,19 @@ rmsle
 
 ## Relative Error Metrics
 
-```@docs
-rse
-rrse
-rae
+```julia
+rse(actual, predicted)  # Relative squared error
+rrse(actual, predicted) # Root relative squared error
+rae(actual, predicted)  # Relative absolute error
 ```
 
 **Interpretation**: Error relative to a naive model that predicts the mean.
 
 ## Model Explanation Metrics
 
-```@docs
-explained_variation
-adjusted_r2
+```julia
+explained_variation(actual, predicted)      # R² (coefficient of determination)
+adjusted_r2(actual, predicted, n_features)  # Adjusted R²
 ```
 
 **Interpretation for R²**:
@@ -129,18 +129,18 @@ adjusted_r2
 
 ## Extreme Error Metrics
 
-```@docs
-max_error
-max_ae
+```julia
+max_error(actual, predicted) # Maximum absolute error
+max_ae(actual, predicted)    # Alias for max_error
 ```
 
 **When to use**: When worst-case error matters (safety-critical applications).
 
 ## Robust Loss Functions
 
-```@docs
-huber_loss
-log_cosh_loss
+```julia
+huber_loss(actual, predicted; delta=1.0)
+log_cosh_loss(actual, predicted)
 ```
 
 **When to use**:
@@ -151,9 +151,9 @@ log_cosh_loss
 
 ## Quantile Loss
 
-```@docs
-quantile_loss
-pinball_loss
+```julia
+quantile_loss(actual, predicted; quantile=0.5)
+pinball_loss(actual, predicted; quantile=0.5)  # Alias
 ```
 
 **When to use**:
@@ -164,11 +164,11 @@ pinball_loss
 
 ## GLM Deviance Metrics
 
-```@docs
-tweedie_deviance
-mean_poisson_deviance
-mean_gamma_deviance
-d2_tweedie_score
+```julia
+tweedie_deviance(actual, predicted; power=1.5)
+mean_poisson_deviance(actual, predicted)
+mean_gamma_deviance(actual, predicted)
+d2_tweedie_score(actual, predicted; power=1.5)
 ```
 
 **When to use**:
@@ -224,3 +224,5 @@ mae(actual, predicted)   # ~19.0
 mdae(actual, predicted)  # ~0.1 (median)
 huber_loss(actual, predicted, delta=1.0)  # Less sensitive
 ```
+
+See the [API Reference](@ref) for complete function documentation.

@@ -26,8 +26,8 @@ Binary classification metrics fall into two categories:
 
 ### Area Under ROC Curve
 
-```@docs
-auc
+```julia
+auc(actual, predicted_probs)
 ```
 
 **Interpretation**:
@@ -44,16 +44,16 @@ auc
 
 ### Gini Coefficient
 
-```@docs
-gini_coefficient
+```julia
+gini_coefficient(actual, predicted_probs)
 ```
 
 **Relationship**: Gini = 2 × AUC - 1
 
 ### KS Statistic
 
-```@docs
-ks_statistic
+```julia
+ks_statistic(actual, predicted_probs)
 ```
 
 **When to use**: Credit scoring, marketing response modeling.
@@ -62,9 +62,9 @@ ks_statistic
 
 ### Log Loss
 
-```@docs
-ll
-logloss
+```julia
+ll(actual, predicted_probs)      # Elementwise
+logloss(actual, predicted_probs) # Mean
 ```
 
 **When to use**:
@@ -73,8 +73,8 @@ logloss
 
 ### Brier Score
 
-```@docs
-brier_score
+```julia
+brier_score(actual, predicted_probs)
 ```
 
 **Interpretation**:
@@ -88,8 +88,8 @@ brier_score
 
 ### Precision (Positive Predictive Value)
 
-```@docs
-precision
+```julia
+precision(actual, predicted_labels)
 ```
 
 **Interpretation**: Of all samples predicted positive, what fraction are actually positive?
@@ -100,9 +100,9 @@ precision
 
 ### Recall (Sensitivity, True Positive Rate)
 
-```@docs
-recall
-sensitivity
+```julia
+recall(actual, predicted_labels)
+sensitivity(actual, predicted_labels)  # Alias
 ```
 
 **Interpretation**: Of all actual positives, what fraction did we detect?
@@ -114,8 +114,8 @@ sensitivity
 
 ## F-Score
 
-```@docs
-fbeta_score
+```julia
+fbeta_score(actual, predicted_labels; beta=1.0)
 ```
 
 **Choosing beta**:
@@ -127,9 +127,9 @@ fbeta_score
 
 ## Specificity and NPV
 
-```@docs
-specificity
-npv
+```julia
+specificity(actual, predicted_labels)
+npv(actual, predicted_labels)
 ```
 
 **Relationships**:
@@ -140,41 +140,41 @@ npv
 
 ## Error Rates
 
-```@docs
-fpr
-fnr
+```julia
+fpr(actual, predicted_labels)  # False Positive Rate
+fnr(actual, predicted_labels)  # False Negative Rate
 ```
 
 ## Combined Metrics
 
 ### Youden's J (Informedness)
 
-```@docs
-youden_j
+```julia
+youden_j(actual, predicted_labels)
 ```
 
 **Use case**: Finding optimal threshold that maximizes sensitivity + specificity.
 
 ### Markedness
 
-```@docs
-markedness
+```julia
+markedness(actual, predicted_labels)
 ```
 
 **Interpretation**: How marked (informative) are positive and negative predictions?
 
 ### Fowlkes-Mallows Index
 
-```@docs
-fowlkes_mallows_index
+```julia
+fowlkes_mallows_index(actual, predicted_labels)
 ```
 
 ## Likelihood Ratios (Medical/Diagnostic)
 
-```@docs
-positive_likelihood_ratio
-negative_likelihood_ratio
-diagnostic_odds_ratio
+```julia
+positive_likelihood_ratio(actual, predicted_labels)
+negative_likelihood_ratio(actual, predicted_labels)
+diagnostic_odds_ratio(actual, predicted_labels)
 ```
 
 **Interpretation of LR+**:
@@ -193,8 +193,8 @@ diagnostic_odds_ratio
 
 ### Lift
 
-```@docs
-lift
+```julia
+lift(actual, predicted_probs; percentile=0.1)
 ```
 
 **Interpretation**: How many times better than random in the top X%?
@@ -202,8 +202,8 @@ lift
 
 ### Gain
 
-```@docs
-gain
+```julia
+gain(actual, predicted_probs; percentile=0.1)
 ```
 
 **Interpretation**: What percentage of all positives are captured in top X%?
@@ -310,3 +310,5 @@ println("Recall: ", recall(actual, predicted_better))
 println("Precision: ", precision(actual, predicted_better))
 println("MCC: ", round(mcc(actual, predicted_better), digits=3))
 ```
+
+See the [API Reference](@ref) for complete function documentation.

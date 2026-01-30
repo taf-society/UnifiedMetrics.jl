@@ -40,8 +40,8 @@ relevance = [3, 2, 1, 0, 2]  # Scores for items in ranked order
 
 ### DCG
 
-```@docs
-dcg
+```julia
+dcg(relevance)
 ```
 
 **How it works**: Sums relevance scores with logarithmic discount by position.
@@ -50,16 +50,16 @@ dcg
 
 ### IDCG (Ideal DCG)
 
-```@docs
-idcg
+```julia
+idcg(relevance)
 ```
 
 **How it works**: DCG of the best possible ranking (sorted by relevance descending).
 
 ### NDCG (Normalized DCG)
 
-```@docs
-ndcg
+```julia
+ndcg(relevance; k=nothing)
 ```
 
 **Interpretation**:
@@ -73,8 +73,8 @@ ndcg
 
 ### Mean NDCG
 
-```@docs
-mean_ndcg
+```julia
+mean_ndcg(relevances; k=nothing)
 ```
 
 **When to use**: Evaluating across multiple queries.
@@ -83,16 +83,16 @@ mean_ndcg
 
 ### Reciprocal Rank
 
-```@docs
-reciprocal_rank
+```julia
+reciprocal_rank(actual, predicted)
 ```
 
 **How it works**: 1/position of first relevant item.
 
 ### Mean Reciprocal Rank (MRR)
 
-```@docs
-mrr
+```julia
+mrr(actual_list, predicted_list)
 ```
 
 **When to use**:
@@ -108,16 +108,16 @@ mrr
 
 ### AP@K
 
-```@docs
-apk
+```julia
+apk(k, actual, predicted)
 ```
 
 **How it works**: Average precision at each position where a relevant item is found.
 
 ### MAP@K (Mean Average Precision)
 
-```@docs
-mapk
+```julia
+mapk(k, actual_list, predicted_list)
 ```
 
 **When to use**:
@@ -129,36 +129,36 @@ mapk
 
 ### F1 Score (IR Context)
 
-```@docs
-f1
+```julia
+f1(actual, predicted)
 ```
 
 ### Precision@K
 
-```@docs
-precision_at_k
+```julia
+precision_at_k(actual, predicted; k)
 ```
 
 **Interpretation**: Of the top K results, what fraction are relevant?
 
 ### Recall@K
 
-```@docs
-recall_at_k
+```julia
+recall_at_k(actual, predicted; k)
 ```
 
 **Interpretation**: Of all relevant items, what fraction appear in top K?
 
 ### F1@K
 
-```@docs
-f1_at_k
+```julia
+f1_at_k(actual, predicted; k)
 ```
 
 ## Hit Rate
 
-```@docs
-hit_rate
+```julia
+hit_rate(actual_list, predicted_list; k)
 ```
 
 **When to use**:
@@ -170,8 +170,8 @@ hit_rate
 
 ### Coverage
 
-```@docs
-coverage
+```julia
+coverage(recommendations, catalog)
 ```
 
 **Interpretation**: What fraction of the catalog gets recommended?
@@ -180,8 +180,8 @@ coverage
 
 ### Novelty
 
-```@docs
-novelty
+```julia
+novelty(recommendations, popularity)
 ```
 
 **Interpretation**: Are we recommending non-obvious items?
@@ -324,3 +324,5 @@ for (name, model) in [("Model A", model_a), ("Model B", model_b)]
     println("  Hit Rate@3: $(round(hit_rate(actual, model, k=3), digits=3))")
 end
 ```
+
+See the [API Reference](@ref) for complete function documentation.

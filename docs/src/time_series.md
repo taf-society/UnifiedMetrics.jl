@@ -96,9 +96,11 @@ The most important innovation in time series evaluation. These metrics compare y
 
 ### MASE (Mean Absolute Scaled Error)
 
-```@docs
-mase
+```julia
+mase(actual, predicted; m=1)
 ```
+
+Compute the Mean Absolute Scaled Error. See [API Reference](@ref) for full documentation.
 
 #### Why MASE is the Gold Standard
 
@@ -150,10 +152,12 @@ mase(actual, predicted, m=1)   # Usually higher - seasonal naive is a tougher be
 
 ### MSSE and RMSSE
 
-```@docs
-msse
-rmsse
+```julia
+msse(actual, predicted; m=1)
+rmsse(actual, predicted; m=1)
 ```
+
+Squared scaled error metrics. See [API Reference](@ref) for full documentation.
 
 #### When to Use RMSSE vs MASE
 
@@ -177,9 +181,11 @@ Systematic bias is a common problem in forecasting. A model might have good over
 
 ### Tracking Signal
 
-```@docs
-tracking_signal
+```julia
+tracking_signal(actual, predicted)
 ```
+
+Monitor forecast bias over time. See [API Reference](@ref) for full documentation.
 
 #### Real-Time Bias Monitoring
 
@@ -216,9 +222,11 @@ end
 
 ### Forecast Bias
 
-```@docs
-forecast_bias
+```julia
+forecast_bias(actual, predicted)
 ```
+
+Compute the average forecast error. See [API Reference](@ref) for full documentation.
 
 #### Bias vs Tracking Signal
 
@@ -241,10 +249,12 @@ tracking_signal(actual, predicted)  # Returns ~5.0 (normalized, indicates bias)
 
 ### Theil's U Statistics
 
-```@docs
-theil_u1
-theil_u2
+```julia
+theil_u1(actual, predicted)
+theil_u2(actual, predicted; m=1)
 ```
+
+Benchmark comparison metrics. See [API Reference](@ref) for full documentation.
 
 #### Understanding Theil's U1 vs U2
 
@@ -271,9 +281,11 @@ println(u2 < 1 ? "Model beats naive forecast" : "Naive forecast is better")
 
 ### WAPE (Weighted Absolute Percentage Error)
 
-```@docs
-wape
+```julia
+wape(actual, predicted)
 ```
+
+Weighted percentage error metric. See [API Reference](@ref) for full documentation.
 
 #### WAPE vs MAPE
 
@@ -303,9 +315,11 @@ wape(actual, predicted)  # Returns meaningful percentage
 
 ## Directional Accuracy
 
-```@docs
-directional_accuracy
+```julia
+directional_accuracy(actual, predicted)
 ```
+
+Measures how often the model predicts the correct direction of change. See [API Reference](@ref) for full documentation.
 
 #### When Direction Matters More Than Magnitude
 
@@ -346,9 +360,11 @@ Modern forecasting produces **probabilistic forecasts** with prediction interval
 
 ### Coverage Probability
 
-```@docs
-coverage_probability
+```julia
+coverage_probability(actual, lower, upper)
 ```
+
+Compute the proportion of actual values within prediction intervals. See [API Reference](@ref) for full documentation.
 
 #### Calibration Assessment
 
@@ -375,9 +391,11 @@ end
 
 ### Winkler Score
 
-```@docs
-winkler_score
+```julia
+winkler_score(actual, lower, upper; alpha=0.05)
 ```
+
+Evaluate prediction intervals for sharpness and calibration. See [API Reference](@ref) for full documentation.
 
 #### Why Winkler Score?
 
@@ -410,9 +428,11 @@ winkler_score(actual, lower_b, upper_b, alpha=0.05)  # Lower (better)
 
 ### Pinball Loss (Quantile Loss)
 
-```@docs
-pinball_loss_series
+```julia
+pinball_loss_series(actual, predicted; quantile=0.5)
 ```
+
+Evaluate quantile forecasts. See [API Reference](@ref) for full documentation.
 
 #### Evaluating Quantile Forecasts
 
@@ -437,9 +457,11 @@ end
 
 ## Autocorrelation Preservation
 
-```@docs
-autocorrelation_error
+```julia
+autocorrelation_error(actual, predicted; max_lag=10)
 ```
+
+Measure how well the forecast preserves the temporal structure. See [API Reference](@ref) for full documentation.
 
 #### When Temporal Structure Matters
 
