@@ -191,7 +191,11 @@ function theil_u1(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Re
     numerator = sqrt(mean((actual .- predicted).^2))
     denominator = sqrt(mean(actual.^2)) + sqrt(mean(predicted.^2))
 
-    return denominator == 0 ? NaN : numerator / denominator
+    if denominator == 0
+        # Both actual and predicted are all zeros
+        return numerator == 0 ? 0.0 : NaN
+    end
+    return numerator / denominator
 end
 
 """
@@ -229,7 +233,11 @@ function theil_u2(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Re
     forecast_mse = mean((actual_subset .- predicted_subset).^2)
     naive_mse = mean((actual_subset .- naive_forecast).^2)
 
-    return naive_mse == 0 ? Inf : sqrt(forecast_mse / naive_mse)
+    if naive_mse == 0
+        # Constant series: return 0 for perfect forecast, Inf otherwise
+        return forecast_mse == 0 ? 0.0 : Inf
+    end
+    return sqrt(forecast_mse / naive_mse)
 end
 
 """

@@ -711,6 +711,19 @@ using Statistics
             predicted = [1.1, 2.0, 2.9, 4.1, 4.9]
             @test_throws AssertionError theil_u2(actual, predicted, m=0)
         end
+
+        @testset "Theil U1/U2 constant series" begin
+            constant = [5.0, 5.0, 5.0, 5.0, 5.0]
+            # Perfect forecast on constant series
+            @test theil_u1(constant, constant) ≈ 0.0
+            @test theil_u2(constant, constant) ≈ 0.0
+            # Non-perfect forecast on constant series
+            non_constant = [5.0, 5.1, 5.0, 4.9, 5.0]
+            @test theil_u2(constant, non_constant) == Inf
+            # All zeros
+            zeros_vec = [0.0, 0.0, 0.0, 0.0, 0.0]
+            @test theil_u1(zeros_vec, zeros_vec) ≈ 0.0
+        end
     end
 
 end
