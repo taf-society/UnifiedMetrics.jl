@@ -1,12 +1,13 @@
 name = "UnifiedMetrics"
 uuid = "2f5f7d54-6893-4422-9ad5-7bdbd4c94e46"
-authors = ["Resul Akay <resul.akay@taf-society.org> and contributors"]
 version = "0.1.0"
+authors = ["Resul Akay <resul.akay@taf-society.org> and contributors"]
 
 [deps]
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
+Statistics = "1"
 julia = "1.11"
 
 [extras]
