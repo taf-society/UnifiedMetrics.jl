@@ -60,7 +60,8 @@ using Statistics
         @testset "MPE" begin
             actual_mpe = [100.0, 200.0, 300.0]
             predicted_mpe = [90.0, 210.0, 290.0]
-            @test mpe(actual_mpe, predicted_mpe) ≈ mean((actual_mpe .- predicted_mpe) ./ actual_mpe) * 100
+            # MPE returns proportion (0.1 = 10%), not percentage
+            @test mpe(actual_mpe, predicted_mpe) ≈ mean((actual_mpe .- predicted_mpe) ./ actual_mpe)
         end
 
         @testset "Log Errors" begin

@@ -24,10 +24,10 @@ end
 """
     percent_bias(actual, predicted)
 
-Compute the average amount that `actual` is greater than `predicted` as a percentage
+Compute the average amount that `actual` is greater than `predicted` as a proportion
 of the absolute value of `actual`.
 
-Returns `-Inf`, `Inf`, or `NaN` if any elements of `actual` are `0`.
+Returns a proportion (0.1 = 10%). Returns `-Inf`, `Inf`, or `NaN` if any elements of `actual` are `0`.
 
 # Arguments
 - `actual::AbstractVector{<:Real}`: Ground truth numeric vector
@@ -192,7 +192,7 @@ end
 
 Compute the elementwise absolute percent error between two numeric vectors.
 
-Returns `-Inf`, `Inf`, or `NaN` if `actual` contains zeros.
+Returns proportions (0.1 = 10%). Returns `-Inf`, `Inf`, or `NaN` if `actual` contains zeros.
 
 # Arguments
 - `actual::AbstractVector{<:Real}`: Ground truth numeric vector
@@ -215,8 +215,8 @@ end
 
 Compute the mean absolute percent error between two numeric vectors.
 
-Returns `-Inf`, `Inf`, or `NaN` if `actual` contains zeros. Due to instability at
-or near zero, `smape` or `mase` are often used as alternatives.
+Returns a proportion (0.1 = 10%). Returns `-Inf`, `Inf`, or `NaN` if `actual` contains zeros.
+Due to instability at or near zero, `smape` or `mase` are often used as alternatives.
 
 # Arguments
 - `actual::AbstractVector{<:Real}`: Ground truth numeric vector
@@ -649,12 +649,12 @@ end
 """
     mpe(actual, predicted)
 
-Compute the Mean Percentage Error (signed).
+Compute the Mean Percentage Error (signed) as a proportion.
 
 Unlike MAPE, MPE can indicate systematic bias: positive values indicate under-prediction
 on average, negative values indicate over-prediction.
 
-Returns `Inf`, `-Inf`, or `NaN` if `actual` contains zeros.
+Returns a proportion (0.1 = 10%). Returns `Inf`, `-Inf`, or `NaN` if `actual` contains zeros.
 
 # Arguments
 - `actual::AbstractVector{<:Real}`: Ground truth numeric vector
@@ -669,7 +669,7 @@ mpe(actual, predicted)
 """
 function mpe(actual::AbstractVector{<:Real}, predicted::AbstractVector{<:Real})
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
-    return mean((actual .- predicted) ./ actual) * 100
+    return mean((actual .- predicted) ./ actual)
 end
 
 """

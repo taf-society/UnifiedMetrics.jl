@@ -89,6 +89,8 @@ Compute the mean average precision at k.
 Evaluates `apk` for each pair of elements from `actual` and `predicted` lists,
 then returns the mean.
 
+Returns `NaN` if `actual` or `predicted` is empty.
+
 # Arguments
 - `k::Integer`: Number of predictions to consider for each query
 - `actual::AbstractVector{<:AbstractVector}`: List of ground truth vectors
@@ -104,7 +106,7 @@ mapk(2, actual, predicted)
 function mapk(k::Integer, actual::AbstractVector{<:AbstractVector},
               predicted::AbstractVector{<:AbstractVector})
     if isempty(actual) || isempty(predicted)
-        return 0.0
+        return NaN
     end
 
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
@@ -269,6 +271,8 @@ Compute the hit rate (recall@k) for recommendation systems.
 Hit rate is the fraction of queries where at least one relevant item appears
 in the top k predictions.
 
+Returns `NaN` if `actual` is empty.
+
 # Arguments
 - `actual::AbstractVector{<:AbstractVector}`: List of ground truth relevant items for each query
 - `predicted::AbstractVector{<:AbstractVector}`: List of ranked predictions for each query
@@ -283,6 +287,10 @@ hit_rate(actual, predicted, k=3)  # 2/3 queries have a hit in top 3
 """
 function hit_rate(actual::AbstractVector{<:AbstractVector}, predicted::AbstractVector{<:AbstractVector}; k::Integer=10)
     @assert length(actual) == length(predicted) "Length of actual and predicted must be the same"
+
+    if isempty(actual)
+        return NaN
+    end
 
     hits = 0
     for (act, pred) in zip(actual, predicted)
