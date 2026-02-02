@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 181 209">
+  <!-- Hexagon background - dark -->
+  <polygon 
+    points="90.5,1 180,53 180,157 90.5,209 1,157 1,53" 
+    fill="#1A1A2E" 
+    stroke="#2D2D44" 
+    stroke-width="3"/>
+  
+  <!-- Subtle grid pattern -->
+  <g opacity="0.08" stroke="#FFFFFF">
+    <line x1="30" y1="50" x2="150" y2="50" stroke-width="0.5"/>
+    <line x1="30" y1="70" x2="150" y2="70" stroke-width="0.5"/>
+    <line x1="30" y1="90" x2="150" y2="90" stroke-width="0.5"/>
+    <line x1="30" y1="110" x2="150" y2="110" stroke-width="0.5"/>
+    <line x1="30" y1="130" x2="150" y2="130" stroke-width="0.5"/>
+    <line x1="50" y1="40" x2="50" y2="140" stroke-width="0.5"/>
+    <line x1="70" y1="40" x2="70" y2="140" stroke-width="0.5"/>
+    <line x1="90" y1="40" x2="90" y2="140" stroke-width="0.5"/>
+    <line x1="110" y1="40" x2="110" y2="140" stroke-width="0.5"/>
+    <line x1="130" y1="40" x2="130" y2="140" stroke-width="0.5"/>
+  </g>
+
+  <!-- Central mathematical symbol arrangement -->
+  <g transform="translate(90.5, 88)">
+    <!-- Julia tri-color dots in triangular formation -->
+    <circle cx="-28" cy="-18" r="10" fill="#CB3C33"/>
+    <circle cx="28" cy="-18" r="10" fill="#389826"/>
+    <circle cx="0" cy="28" r="10" fill="#9558B2"/>
+    
+    <!-- Central sigma on grid intersection -->
+    <text x="0" y="8" 
+          text-anchor="middle" 
+          font-family="Times New Roman, Georgia, serif" 
+          font-size="48" 
+          font-weight="normal" 
+          fill="#FFFFFF">
+      Σ
+    </text>
+  </g>
+  
+  <!-- Package name - clean white, smaller -->
+  <text x="90.5" y="168" 
+        text-anchor="middle" 
+        font-family="SF Mono, Menlo, Consolas, monospace" 
+        font-size="9" 
+        font-weight="700" 
+        letter-spacing="0.2"
+        fill="#FFFFFF">
+    UnifiedMetrics<tspan fill="#9558B2">.jl</tspan>
+  </text>
+</svg>

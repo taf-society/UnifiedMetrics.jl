@@ -1,11 +1,10 @@
+<div align="center">
+<img src="docs/src/assets/logo.svg"/>
+</div>
+
 # UnifiedMetrics.jl
 
-[![Build Status](https://github.com/taf-society/UnifiedMetrics.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/taf-society/UnifiedMetrics.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/taf-society/UnifiedMetrics.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/taf-society/UnifiedMetrics.jl)
-[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://taf-society.github.io/UnifiedMetrics.jl/stable/)
-[![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://taf-society.github.io/UnifiedMetrics.jl/dev/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Julia](https://img.shields.io/badge/Julia-1.11+-blue.svg)](https://julialang.org/)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://taf-society.github.io/UnifiedMetrics.jl/stable/) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://taf-society.github.io/UnifiedMetrics.jl/dev/) [![Build Status](https://github.com/taf-society/UnifiedMetrics.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/taf-society/UnifiedMetrics.jl/actions/workflows/CI.yml?query=branch%3Amain) [![Coverage](https://codecov.io/gh/taf-society/UnifiedMetrics.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/taf-society/UnifiedMetrics.jl)
 
 A comprehensive Julia package for evaluating machine learning models. Provides **97 metrics** across regression, classification, binary classification, information retrieval, and time series forecasting.
 

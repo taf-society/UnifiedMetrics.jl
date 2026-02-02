@@ -7,7 +7,8 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == "true",
         canonical = "https://taf-society.github.io/UnifiedMetrics.jl",
-        assets = String[],
+        assets = ["assets/theme.css"],
+        mathengine = Documenter.MathJax3(),
     ),
     pages = [
         "Home" => "index.md",
